@@ -1,7 +1,6 @@
 name: LMS Backend CI
 
-on:
-  push
+on: push
 
 jobs:
   build:
@@ -17,6 +16,8 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
+      - name: Verify project structure
+        run: ls -R
+
       - name: Build Backend
-        working-directory: Lms_Backend
-        run: mvn clean package
+        run: cd lms-backend && mvn clean package
