@@ -1,0 +1,22 @@
+name: Backend CI
+
+on:
+  push:
+    paths:
+      - 'Lms_Backend/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+
+      - name: Build Backend
+        working-directory: Lms_Backend
+        run: mvn clean package
