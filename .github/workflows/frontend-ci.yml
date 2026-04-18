@@ -1,0 +1,25 @@
+name: LMS Frontend CI
+
+on:
+  push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        working-directory: library_management_system_frontend-main
+        run: npm install
+
+      - name: Build React App
+        working-directory: library_management_system_frontend-main
+        run: npm run build
