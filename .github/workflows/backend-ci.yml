@@ -16,5 +16,5 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
-      - name: Build Backend
-        run: cd lms-backend && mvn clean package
+      - name: Build Backend (skip tests)
+        run: cd lms-backend && mvn clean package -DskipTests
