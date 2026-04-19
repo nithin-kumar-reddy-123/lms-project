@@ -10,7 +10,10 @@ import com.lms.backend.repository.UserRepository;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = {
+    "http://localhost:5173",
+    "https://lms-project-git-main-developers-e7d880af.vercel.app"
+})
 public class AuthController {
 
     @Autowired
