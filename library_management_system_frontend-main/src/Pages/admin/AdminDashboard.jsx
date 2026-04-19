@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import BASE_URL from "./services/api";   // ✅ import
 
 function AdminDashboard() {
   const [books, setBooks] = useState([]);
@@ -8,10 +9,10 @@ function AdminDashboard() {
     quantity: "",
   });
 
-  // Fetch all books
+  // Fetch books
   const fetchBooks = async () => {
     try {
-      const res = await fetch("http://localhost:8082/api/books");
+      const res = await fetch(`${BASE_URL}/books`);   // ✅ fixed
       const data = await res.json();
       setBooks(data);
     } catch (err) {
@@ -23,7 +24,6 @@ function AdminDashboard() {
     fetchBooks();
   }, []);
 
-  // Handle input
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -31,7 +31,7 @@ function AdminDashboard() {
   // Add book
   const handleAddBook = async () => {
     try {
-      await fetch("http://localhost:8082/api/books", {
+      await fetch(`${BASE_URL}/books`, {   // ✅ fixed
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -53,7 +53,7 @@ function AdminDashboard() {
   // Delete book
   const handleDelete = async (id) => {
     try {
-      await fetch(`http://localhost:8082/api/books/${id}`, {
+      await fetch(`${BASE_URL}/books/${id}`, {   // ✅ fixed
         method: "DELETE",
       });
 
@@ -67,33 +67,15 @@ function AdminDashboard() {
     <div style={{ padding: "20px" }}>
       <h2>📚 Admin Dashboard</h2>
 
-      {/* Add Book Form */}
-      <div style={{ marginBottom: "20px" }}>
-        <input
-          type="text"
-          name="title"
-          placeholder="Book Title"
-          value={formData.title}
-          onChange={handleChange}
-        />
-        <input
-          type="text"
-          name="author"
-          placeholder="Author"
-          value={formData.author}
-          onChange={handleChange}
-        />
-        <input
-          type="number"
-          name="quantity"
-          placeholder="Quantity"
-          value={formData.quantity}
-          onChange={handleChange}
-        />
+      {/* Add Book */}
+      <div>
+        <input name="title" placeholder="Title" value={formData.title} onChange={handleChange} />
+        <input name="author" placeholder="Author" value={formData.author} onChange={handleChange} />
+        <input name="quantity" type="number" placeholder="Quantity" value={formData.quantity} onChange={handleChange} />
         <button onClick={handleAddBook}>Add Book</button>
       </div>
 
-      {/* Book List */}
+      {/* Table */}
       <table border="1" cellPadding="10">
         <thead>
           <tr>
@@ -104,6 +86,7 @@ function AdminDashboard() {
             <th>Action</th>
           </tr>
         </thead>
+
         <tbody>
           {books.map((book) => (
             <tr key={book.id}>
@@ -112,9 +95,7 @@ function AdminDashboard() {
               <td>{book.author}</td>
               <td>{book.quantity}</td>
               <td>
-                <button onClick={() => handleDelete(book.id)}>
-                  Delete
-                </button>
+                <button onClick={() => handleDelete(book.id)}>Delete</button>
               </td>
             </tr>
           ))}

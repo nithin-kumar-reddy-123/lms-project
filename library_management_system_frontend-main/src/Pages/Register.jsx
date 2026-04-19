@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import BASE_URL from "./services/api";   // ✅ import
 
 function Register() {
   const navigate = useNavigate();
@@ -20,13 +21,11 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Password validation
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match");
       return;
     }
 
-    // Match backend fields
     const userData = {
       fullName: formData.name,
       email: formData.email,
@@ -35,7 +34,7 @@ function Register() {
     };
 
     try {
-      const response = await fetch("http://localhost:8082/api/auth/register", {
+      const response = await fetch(`${BASE_URL}/auth/register`, {  // ✅ fixed
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -63,91 +62,31 @@ function Register() {
         <div className="auth-header">
           <div className="auth-logo">📘</div>
           <h1 className="auth-title">Create Account</h1>
-          <p className="auth-subtitle">Register as student or faculty</p>
         </div>
 
         <div className="auth-tabs">
-          <Link
-            to="/login"
-            className={`auth-tab ${location.pathname === "/login" ? "active" : ""}`}
-          >
+          <Link to="/login" className={`auth-tab ${location.pathname === "/login" ? "active" : ""}`}>
             Login
           </Link>
-          <Link
-            to="/register"
-            className={`auth-tab ${location.pathname === "/register" ? "active" : ""}`}
-          >
+          <Link to="/register" className={`auth-tab ${location.pathname === "/register" ? "active" : ""}`}>
             Register
           </Link>
         </div>
 
         <form onSubmit={handleSubmit} className="form">
 
-          <div className="input-group">
-            <label className="input-label">Full Name</label>
-            <input
-              type="text"
-              name="name"
-              placeholder="Enter full name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-            />
-          </div>
+          <input name="name" placeholder="Full Name" value={formData.name} onChange={handleChange} required />
+          <input name="email" placeholder="Email" value={formData.email} onChange={handleChange} required />
 
-          <div className="input-group">
-            <label className="input-label">Email</label>
-            <input
-              type="email"
-              name="email"
-              placeholder="Enter email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-          </div>
+          <select name="role" value={formData.role} onChange={handleChange}>
+            <option value="STUDENT">Student</option>
+            <option value="FACULTY">Faculty</option>
+          </select>
 
-          <div className="input-group">
-            <label className="input-label">Role</label>
-            <select
-              name="role"
-              value={formData.role}
-              onChange={handleChange}
-              className="select-input"
-            >
-              <option value="STUDENT">Student</option>
-              <option value="FACULTY">Faculty</option>
-            </select>
-          </div>
+          <input type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} required />
+          <input type="password" name="confirmPassword" placeholder="Confirm Password" value={formData.confirmPassword} onChange={handleChange} required />
 
-          <div className="input-group">
-            <label className="input-label">Password</label>
-            <input
-              type="password"
-              name="password"
-              placeholder="Enter password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className="input-group">
-            <label className="input-label">Confirm Password</label>
-            <input
-              type="password"
-              name="confirmPassword"
-              placeholder="Confirm password"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <button type="submit" className="primary-submit">
-            Register
-          </button>
-
+          <button type="submit">Register</button>
         </form>
       </div>
     </div>

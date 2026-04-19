@@ -22,7 +22,7 @@ function Login() {
     }
 
     try {
-      const response = await fetch("http://localhost:8082/api/auth/login", {
+      const response = await fetch("https://lms-project-3x30.onrender.com/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
