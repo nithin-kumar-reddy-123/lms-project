@@ -12,9 +12,13 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("*")   // allow all (for now)
-                        .allowedMethods("*")
-                        .allowedHeaders("*");
+                        .allowedOrigins(
+                            "http://localhost:5173",
+                            "https://lms-project-git-main-developers-e7d880af.vercel.app"
+                        )
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                        .allowedHeaders("*")
+                        .allowCredentials(true);
             }
         };
     }
