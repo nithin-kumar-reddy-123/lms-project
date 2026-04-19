@@ -10,12 +10,13 @@ import com.lms.backend.repository.UserRepository;
 
 @RestController
 @RequestMapping("/api/auth")
-
+@CrossOrigin(origins = "*")
 public class AuthController {
 
     @Autowired
     private UserRepository userRepository;
 
+    // Register
     @PostMapping("/register")
     public String registerUser(@RequestBody User user) {
         Optional<User> existingUser = userRepository.findByEmail(user.getEmail());
@@ -28,8 +29,10 @@ public class AuthController {
         return "Registration successful!";
     }
 
+    // Login
     @PostMapping("/login")
     public String loginUser(@RequestBody User loginUser) {
+
         Optional<User> user = userRepository.findByEmail(loginUser.getEmail());
 
         if (user.isPresent()) {
@@ -45,11 +48,3 @@ public class AuthController {
         }
     }
 }
-
-
-
-        catch (Exception e) {
-            e.printStackTrace();
-            return "Error occurred";
-        }
-    
