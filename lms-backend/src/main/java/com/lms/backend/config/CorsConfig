@@ -15,14 +15,14 @@ public class CorsConfig {
             public void addCorsMappings(CorsRegistry registry) {
 
                 registry.addMapping("/**")
-                        .allowedOrigins(
-                                "http://localhost:5173",   // local frontend
-                                "https://lms-project-git-main-developers-e7d880af.vercel.app" // your deployed frontend
-                        )
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                        .allowedHeaders("*")
-                        .allowCredentials(true);
-            }
+        .allowedOrigins(
+                "http://localhost:5173",
+                "http://localhost:5174",   // ✅ ADD THIS
+                "https://lms-project-git-main-developers-e7d880af.vercel.app"
+        )
+        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+        .allowedHeaders("*")
+        .allowCredentials(true);
         };
     }
 }
