@@ -10,22 +10,18 @@ import com.lms.backend.repository.UserRepository;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = {
-    "http://localhost:5173",
-    "https://lms-project-git-main-developers-e7d880af.vercel.app"
-})
 public class AuthController {
 
     @Autowired
     private UserRepository userRepository;
 
-    // Register API
+    // ✅ REGISTER
     @PostMapping("/register")
     public String registerUser(@RequestBody User user) {
 
         Optional<User> existingUser = userRepository.findByEmail(user.getEmail());
 
-        if(existingUser.isPresent()) {
+        if (existingUser.isPresent()) {
             return "Email already exists!";
         }
 
@@ -33,11 +29,10 @@ public class AuthController {
         return "Registration successful!";
     }
 
-    // Login API
+    // ✅ LOGIN
     @PostMapping("/login")
     public String loginUser(@RequestBody User loginUser) {
 
-        // 🔍 DEBUG LOGS
         System.out.println("Login Email: " + loginUser.getEmail());
         System.out.println("Login Password: " + loginUser.getPassword());
 
@@ -47,13 +42,12 @@ public class AuthController {
             if (user.isPresent()) {
                 User existingUser = user.get();
 
-                // 🔍 DB VALUES
                 System.out.println("DB Email: " + existingUser.getEmail());
                 System.out.println("DB Password: " + existingUser.getPassword());
                 System.out.println("DB Role: " + existingUser.getRole());
 
                 if (existingUser.getPassword().equals(loginUser.getPassword())) {
-                    return existingUser.getRole();
+                    return existingUser.getRole(); // ADMIN / STUDENT / FACULTY
                 } else {
                     return "Invalid credentials";
                 }
@@ -62,7 +56,7 @@ public class AuthController {
             }
 
         } catch (Exception e) {
-            e.printStackTrace(); // VERY IMPORTANT
+            e.printStackTrace();
             return "Error occurred";
         }
     }
