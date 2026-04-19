@@ -1,3 +1,5 @@
+package com.lms.backend.config;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -14,8 +16,8 @@ public class CorsConfig {
 
                 registry.addMapping("/**")
                         .allowedOrigins(
-                                "http://localhost:5173",
-                                "https://lms-project-git-main-developers-e7d880af.vercel.app"
+                                "http://localhost:5173",   // local frontend
+                                "https://lms-project-git-main-developers-e7d880af.vercel.app" // your deployed frontend
                         )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
