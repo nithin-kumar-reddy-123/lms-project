@@ -10,15 +10,22 @@ import com.lms.backend.repository.UserRepository;
 
 @RestController
 @RequestMapping("/api/auth")
+@CrossOrigin(
+    origins = {
+        "http://localhost:5173",
+        "https://lms-project-git-main-developers-e7d880af.vercel.app",
+        "https://*.vercel.app"
+    },
+    allowedHeaders = "*",
+    methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS}
+)
 public class AuthController {
 
     @Autowired
     private UserRepository userRepository;
 
-    // ✅ REGISTER
     @PostMapping("/register")
     public String registerUser(@RequestBody User user) {
-
         Optional<User> existingUser = userRepository.findByEmail(user.getEmail());
 
         if (existingUser.isPresent()) {
@@ -29,35 +36,28 @@ public class AuthController {
         return "Registration successful!";
     }
 
-    // ✅ LOGIN
     @PostMapping("/login")
     public String loginUser(@RequestBody User loginUser) {
+        Optional<User> user = userRepository.findByEmail(loginUser.getEmail());
 
-        System.out.println("Login Email: " + loginUser.getEmail());
-        System.out.println("Login Password: " + loginUser.getPassword());
+        if (user.isPresent()) {
+            User existingUser = user.get();
 
-        try {
-            Optional<User> user = userRepository.findByEmail(loginUser.getEmail());
-
-            if (user.isPresent()) {
-                User existingUser = user.get();
-
-                System.out.println("DB Email: " + existingUser.getEmail());
-                System.out.println("DB Password: " + existingUser.getPassword());
-                System.out.println("DB Role: " + existingUser.getRole());
-
-                if (existingUser.getPassword().equals(loginUser.getPassword())) {
-                    return existingUser.getRole(); // ADMIN / STUDENT / FACULTY
-                } else {
-                    return "Invalid credentials";
-                }
+            if (existingUser.getPassword().equals(loginUser.getPassword())) {
+                return existingUser.getRole();
             } else {
-                return "User not found";
+                return "Invalid credentials";
             }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "Error occurred";
+        } else {
+            return "User not found";
         }
     }
 }
+
+
+
+        catch (Exception e) {
+            e.printStackTrace();
+            return "Error occurred";
+        }
+    
