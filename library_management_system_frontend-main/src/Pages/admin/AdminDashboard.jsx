@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import BASE_URL from "./services/api";   // ✅ import
+import API from "../../services/api";   // ✅ correct path
 
 function AdminDashboard() {
   const [books, setBooks] = useState([]);
@@ -9,12 +9,10 @@ function AdminDashboard() {
     quantity: "",
   });
 
-  // Fetch books
   const fetchBooks = async () => {
     try {
-      const res = await fetch(`${BASE_URL}/books`);   // ✅ fixed
-      const data = await res.json();
-      setBooks(data);
+      const res = await API.get("/books");   // ✅ axios
+      setBooks(res.data);
     } catch (err) {
       console.error(err);
     }
@@ -28,18 +26,11 @@ function AdminDashboard() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Add book
   const handleAddBook = async () => {
     try {
-      await fetch(`${BASE_URL}/books`, {   // ✅ fixed
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...formData,
-          quantity: parseInt(formData.quantity),
-        }),
+      await API.post("/books", {   // ✅ axios
+        ...formData,
+        quantity: parseInt(formData.quantity),
       });
 
       alert("Book Added");
@@ -50,13 +41,9 @@ function AdminDashboard() {
     }
   };
 
-  // Delete book
   const handleDelete = async (id) => {
     try {
-      await fetch(`${BASE_URL}/books/${id}`, {   // ✅ fixed
-        method: "DELETE",
-      });
-
+      await API.delete(`/books/${id}`);   // ✅ axios
       fetchBooks();
     } catch (err) {
       console.error(err);
@@ -67,7 +54,6 @@ function AdminDashboard() {
     <div style={{ padding: "20px" }}>
       <h2>📚 Admin Dashboard</h2>
 
-      {/* Add Book */}
       <div>
         <input name="title" placeholder="Title" value={formData.title} onChange={handleChange} />
         <input name="author" placeholder="Author" value={formData.author} onChange={handleChange} />
@@ -75,7 +61,6 @@ function AdminDashboard() {
         <button onClick={handleAddBook}>Add Book</button>
       </div>
 
-      {/* Table */}
       <table border="1" cellPadding="10">
         <thead>
           <tr>

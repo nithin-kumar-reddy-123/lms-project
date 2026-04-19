@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import BASE_URL from "./services/api";   // ✅ import
+import API from "../services/api";   // ✅ correct import
 
 function Register() {
   const navigate = useNavigate();
@@ -34,19 +34,11 @@ function Register() {
     };
 
     try {
-      const response = await fetch(`${BASE_URL}/auth/register`, {  // ✅ fixed
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userData),
-      });
+      const response = await API.post("/auth/register", userData);  // ✅ axios
 
-      const result = await response.text();
+      alert(response.data);
 
-      alert(result);
-
-      if (result.includes("successful")) {
+      if (response.data.includes("successful")) {
         navigate("/login");
       }
 
