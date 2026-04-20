@@ -24,7 +24,8 @@ function Navbar() {
             <Link to="/admin/dashboard">Dashboard</Link>
             <Link to="/admin/books">Books</Link>
             <Link to="/admin/add-book">Add Book</Link>
-            <Link to="/admin/issue-book">Issue Book</Link>
+            <Link to="/admin/users">Users</Link>
+            <Link to="/admin/reports">Reports</Link>
           </>
         )}
 

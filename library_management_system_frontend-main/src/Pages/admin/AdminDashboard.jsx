@@ -65,6 +65,10 @@ function AdminDashboard() {
           <h3>Reports & Analytics</h3>
           <p>View library statistics</p>
         </Link>
+        <Link to="/admin/users" className="dashboard-card">
+          <h3>User Management</h3>
+          <p>Manage admin accounts and users</p>
+        </Link>
       </div>
     </div>
   );

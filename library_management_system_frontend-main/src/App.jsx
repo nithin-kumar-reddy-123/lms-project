@@ -12,6 +12,7 @@ import Books from "./Pages/admin/Books";
 import AddBook from "./Pages/admin/AddBook";
 import IssueBook from "./Pages/admin/IssueBook";
 import Reports from "./Pages/admin/Reports";
+import AdminUsers from "./Pages/admin/AdminUsers";
 
 import StudentDashboard from "./Pages/student/StudentDashboard";
 import StudentSearchBooks from "./Pages/student/SearchBooks";
@@ -81,6 +82,15 @@ function App() {
           element={
             <ProtectedRoute allowedRoles={["ADMIN"]}>
               <Reports />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/users"
+          element={
+            <ProtectedRoute allowedRoles={["ADMIN"]}>
+              <AdminUsers />
             </ProtectedRoute>
           }
         />
