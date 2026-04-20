@@ -23,6 +23,7 @@ public class Issue {
     private LocalDate returnDate;
     private double fineAmount = 0.0;
     private String status = "issued"; // issued, returned, overdue
+    private String paymentStatus = "unpaid"; // unpaid, paid
 
     // Getters & Setters
     public Long getId() { return id; }
@@ -47,4 +48,7 @@ public class Issue {
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+
+    public String getPaymentStatus() { return paymentStatus; }
+    public void setPaymentStatus(String paymentStatus) { this.paymentStatus = paymentStatus; }
 }

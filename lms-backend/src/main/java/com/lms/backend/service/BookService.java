@@ -8,13 +8,21 @@ public interface BookService {
 
     Book addBook(Book book);
 
-    List<Book> getAllBooks();
+    List<Book> getAllBooks(String title, String author, String category);
+
+    Book getBookById(Long id);
 
     void deleteBook(Long id);
+
+    Book updateBook(Long id, Book bookDetails);
 
     String borrowBook(String email, String collegeId, Long bookId);
 
     String returnBook(Long issueId);
 
-    List<Issue> getIssuesForUser(String email);
+    List<Issue> getAllIssues();
+
+    List<Issue> getUserIssues(String email);
+
+    String payFine(Long issueId);
 }

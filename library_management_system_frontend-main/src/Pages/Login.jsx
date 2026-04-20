@@ -35,13 +35,22 @@ function Login() {
         return;
       }
 
-      const role = (await response.text()).trim();
-      console.log("Role:", role);
+      const data = await response.json();
+
+      // Check if token is null (authentication failed)
+      if (!data || !data.token) {
+        alert("Invalid credentials");
+        return;
+      }
+
+      // Store JWT token in localStorage
+      localStorage.setItem("authToken", data.token);
 
       // Update AuthContext with user data from backend
       login({
-        email: email,
-        role: role
+        email: data.email,
+        role: data.role,
+        fullName: data.fullName
       });
 
       // Clear form inputs
@@ -49,13 +58,13 @@ function Login() {
       passwordRef.current.value = "";
 
       // Navigate based on role
-      if (role === "ADMIN") navigate("/admin/dashboard");
-      else if (role === "STUDENT") navigate("/student/dashboard");
-      else if (role === "FACULTY") navigate("/faculty/dashboard");
+      if (data.role === "ADMIN") navigate("/admin/dashboard");
+      else if (data.role === "STUDENT") navigate("/student/dashboard");
+      else if (data.role === "FACULTY") navigate("/faculty/dashboard");
 
     } catch (err) {
-      console.error(err);
-      alert("Server error");
+      console.error("Login error:", err);
+      alert("Server error: " + err.message);
     }
   };
 

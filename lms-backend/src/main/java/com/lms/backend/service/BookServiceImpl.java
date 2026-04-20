@@ -3,6 +3,7 @@ package com.lms.backend.service;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,13 +33,33 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> getAllBooks() {
-        return bookRepository.findAll();
+    public List<Book> getAllBooks(String title, String author, String category) {
+        List<Book> books = bookRepository.findAll();
+        return books.stream()
+                .filter(book -> (title == null || book.getTitle().toLowerCase().contains(title.toLowerCase())))
+                .filter(book -> (author == null || book.getAuthor().toLowerCase().contains(author.toLowerCase())))
+                .filter(book -> (category == null || book.getCategory() != null && book.getCategory().toLowerCase().contains(category.toLowerCase())))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Book getBookById(Long id) {
+        return bookRepository.findById(id).orElseThrow(() -> new RuntimeException("Book not found"));
     }
 
     @Override
     public void deleteBook(Long id) {
         bookRepository.deleteById(id);
+    }
+
+    @Override
+    public Book updateBook(Long id, Book bookDetails) {
+        Book book = bookRepository.findById(id).orElseThrow(() -> new RuntimeException("Book not found"));
+        book.setTitle(bookDetails.getTitle());
+        book.setAuthor(bookDetails.getAuthor());
+        book.setCategory(bookDetails.getCategory());
+        book.setQuantity(bookDetails.getQuantity());
+        return bookRepository.save(book);
     }
 
     @Override
@@ -110,11 +131,33 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Issue> getIssuesForUser(String email) {
+    public List<Issue> getAllIssues() {
+        return issueRepository.findAll();
+    }
+
+    @Override
+    public List<Issue> getUserIssues(String email) {
         User user = userRepository.findByEmail(email).orElse(null);
         if (user == null) {
             return List.of();
         }
         return issueRepository.findByUser(user);
+    }
+
+    @Override
+    public String payFine(Long issueId) {
+        Issue issue = issueRepository.findById(issueId).orElse(null);
+        if (issue == null) {
+            return "Issue not found";
+        }
+
+        if (issue.getFineAmount() <= 0) {
+            return "No fine to pay";
+        }
+
+        issue.setPaymentStatus("paid");
+        issueRepository.save(issue);
+
+        return "Fine paid successfully! Amount: " + issue.getFineAmount();
     }
 }

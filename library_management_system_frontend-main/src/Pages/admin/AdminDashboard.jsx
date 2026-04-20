@@ -1,91 +1,71 @@
 import React, { useState, useEffect } from "react";
-import API from "../../services/api";   // ✅ correct path
+import { Link } from "react-router-dom";
+import API from "../../services/api";
 
 function AdminDashboard() {
-  const [books, setBooks] = useState([]);
-  const [formData, setFormData] = useState({
-    title: "",
-    author: "",
-    quantity: "",
+  const [stats, setStats] = useState({
+    totalBooks: 0,
+    borrowedBooks: 0,
+    returnedBooks: 0,
   });
 
-  const fetchBooks = async () => {
+  const fetchStats = async () => {
     try {
-      const res = await API.get("/books");   // ✅ axios
-      setBooks(res.data);
+      const booksRes = await API.get("/books");
+      const issuesRes = await API.get("/books/all-issues");
+
+      const books = booksRes.data;
+      const issues = issuesRes.data;
+
+      const totalBooks = books.reduce((sum, book) => sum + book.quantity, 0);
+      const borrowedBooks = issues.filter(issue => issue.status === "issued" || issue.status === "overdue").length;
+      const returnedBooks = issues.filter(issue => issue.status === "returned").length;
+
+      setStats({ totalBooks, borrowedBooks, returnedBooks });
     } catch (err) {
       console.error(err);
     }
   };
 
   useEffect(() => {
-    fetchBooks();
+    fetchStats();
   }, []);
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleAddBook = async () => {
-    try {
-      await API.post("/books", {   // ✅ axios
-        ...formData,
-        quantity: parseInt(formData.quantity),
-      });
-
-      alert("Book Added");
-      setFormData({ title: "", author: "", quantity: "" });
-      fetchBooks();
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const handleDelete = async (id) => {
-    try {
-      await API.delete(`/books/${id}`);   // ✅ axios
-      fetchBooks();
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>📚 Admin Dashboard</h2>
+    <div className="page">
+      <h2 className="page-title">📊 Admin Dashboard</h2>
 
-      <div>
-        <input name="title" placeholder="Title" value={formData.title} onChange={handleChange} />
-        <input name="author" placeholder="Author" value={formData.author} onChange={handleChange} />
-        <input name="quantity" type="number" placeholder="Quantity" value={formData.quantity} onChange={handleChange} />
-        <button onClick={handleAddBook}>Add Book</button>
+      <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '30px' }}>
+        <div style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '8px', textAlign: 'center', minWidth: '200px' }}>
+          <h3>Total Books in Library</h3>
+          <p style={{ fontSize: '2em', fontWeight: 'bold', color: '#007bff' }}>{stats.totalBooks}</p>
+        </div>
+
+        <div style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '8px', textAlign: 'center', minWidth: '200px' }}>
+          <h3>Books Borrowed</h3>
+          <p style={{ fontSize: '2em', fontWeight: 'bold', color: '#28a745' }}>{stats.borrowedBooks}</p>
+        </div>
+
+        <div style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '8px', textAlign: 'center', minWidth: '200px' }}>
+          <h3>Books Returned</h3>
+          <p style={{ fontSize: '2em', fontWeight: 'bold', color: '#dc3545' }}>{stats.returnedBooks}</p>
+        </div>
       </div>
 
-      <table border="1" cellPadding="10">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Title</th>
-            <th>Author</th>
-            <th>Quantity</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {books.map((book) => (
-            <tr key={book.id}>
-              <td>{book.id}</td>
-              <td>{book.title}</td>
-              <td>{book.author}</td>
-              <td>{book.quantity}</td>
-              <td>
-                <button onClick={() => handleDelete(book.id)}>Delete</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className="dashboard-grid">
+        <Link to="/admin/books" className="dashboard-card">
+          <h3>Manage Books</h3>
+          <p>View and manage all books</p>
+        </Link>
+        <Link to="/admin/add-book" className="dashboard-card">
+          <h3>Add Book</h3>
+          <p>Add new books to library</p>
+        </Link>
+        <Link to="/admin/reports" className="dashboard-card">
+          <h3>Reports & Analytics</h3>
+          <p>View library statistics</p>
+        </Link>
+      </div>
     </div>
   );
 }

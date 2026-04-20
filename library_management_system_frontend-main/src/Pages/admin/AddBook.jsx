@@ -6,8 +6,7 @@ function AddBook() {
     title: "",
     author: "",
     category: "",
-    isbn: "",
-    totalCopies: "",
+    quantity: "",
   });
 
   const handleChange = (e) => {
@@ -20,7 +19,7 @@ function AddBook() {
     try {
       await API.post("/books", {
         ...book,
-        totalCopies: parseInt(book.totalCopies, 10),
+        quantity: parseInt(book.quantity, 10),
       });
 
       alert("Book added successfully");
@@ -29,8 +28,7 @@ function AddBook() {
         title: "",
         author: "",
         category: "",
-        isbn: "",
-        totalCopies: "",
+        quantity: "",
       });
     } catch (error) {
       alert("Backend not connected yet");
@@ -47,8 +45,7 @@ function AddBook() {
           <input type="text" name="title" placeholder="Book title" value={book.title} onChange={handleChange} required />
           <input type="text" name="author" placeholder="Author name" value={book.author} onChange={handleChange} required />
           <input type="text" name="category" placeholder="Category" value={book.category} onChange={handleChange} />
-          <input type="text" name="isbn" placeholder="ISBN" value={book.isbn} onChange={handleChange} />
-          <input type="number" name="totalCopies" placeholder="Total copies" value={book.totalCopies} onChange={handleChange} required />
+          <input type="number" name="quantity" placeholder="Quantity" value={book.quantity} onChange={handleChange} required />
           <button type="submit">Add Book</button>
         </form>
       </div>

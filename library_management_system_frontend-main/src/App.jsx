@@ -11,14 +11,17 @@ import AdminDashboard from "./Pages/admin/AdminDashboard";
 import Books from "./Pages/admin/Books";
 import AddBook from "./Pages/admin/AddBook";
 import IssueBook from "./Pages/admin/IssueBook";
+import Reports from "./Pages/admin/Reports";
 
 import StudentDashboard from "./Pages/student/StudentDashboard";
 import StudentSearchBooks from "./Pages/student/SearchBooks";
 import StudentMyBooks from "./Pages/student/MyBooks";
+import StudentProfile from "./Pages/student/Profile";
 
 import FacultyDashboard from "./Pages/faculty/FacultyDashboard";
 import FacultySearchBooks from "./Pages/faculty/SearchBooks";
 import FacultyMyBooks from "./Pages/faculty/MyBooks";
+import FacultyProfile from "./Pages/faculty/Profile";
 
 function DefaultRedirect() {
   const { user } = useAuth();
@@ -74,6 +77,15 @@ function App() {
         />
 
         <Route
+          path="/admin/reports"
+          element={
+            <ProtectedRoute allowedRoles={["ADMIN"]}>
+              <Reports />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
           path="/student/dashboard"
           element={
             <ProtectedRoute allowedRoles={["STUDENT"]}>
@@ -99,6 +111,15 @@ function App() {
         />
 
         <Route
+          path="/student/profile"
+          element={
+            <ProtectedRoute allowedRoles={["STUDENT"]}>
+              <StudentProfile />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
           path="/faculty/dashboard"
           element={
             <ProtectedRoute allowedRoles={["FACULTY"]}>
@@ -119,6 +140,15 @@ function App() {
           element={
             <ProtectedRoute allowedRoles={["FACULTY"]}>
               <FacultyMyBooks />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/faculty/profile"
+          element={
+            <ProtectedRoute allowedRoles={["FACULTY"]}>
+              <FacultyProfile />
             </ProtectedRoute>
           }
         />

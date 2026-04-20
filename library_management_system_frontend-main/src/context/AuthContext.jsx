@@ -49,6 +49,7 @@ export function AuthProvider({ children }) {
   const logout = () => {
     setUser(null);
     localStorage.removeItem("lms_user");
+    localStorage.removeItem("authToken");
   };
 
   const value = useMemo(() => {
