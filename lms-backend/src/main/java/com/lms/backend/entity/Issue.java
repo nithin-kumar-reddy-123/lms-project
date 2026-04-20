@@ -10,28 +10,41 @@ public class Issue {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String studentEmail;
-    private String collegeId;
-    private String bookTitle;
+    @ManyToOne
+    @JoinColumn(name = "book_id")
+    private Book book;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     private LocalDate issueDate;
+    private LocalDate dueDate;
+    private LocalDate returnDate;
+    private double fineAmount = 0.0;
+    private String status = "issued"; // issued, returned, overdue
 
     // Getters & Setters
     public Long getId() { return id; }
 
-    public String getStudentEmail() { return studentEmail; }
-    public void setStudentEmail(String studentEmail) { this.studentEmail = studentEmail; }
+    public Book getBook() { return book; }
+    public void setBook(Book book) { this.book = book; }
 
-    public String getBookTitle() { return bookTitle; }
-    public void setBookTitle(String bookTitle) { this.bookTitle = bookTitle; }
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
 
     public LocalDate getIssueDate() { return issueDate; }
     public void setIssueDate(LocalDate issueDate) { this.issueDate = issueDate; }
 
-	public String getCollegeId() {
-		return collegeId;
-	}
+    public LocalDate getDueDate() { return dueDate; }
+    public void setDueDate(LocalDate dueDate) { this.dueDate = dueDate; }
 
-	public void setCollegeId(String collegeId) {
-		this.collegeId = collegeId;
-	}
+    public LocalDate getReturnDate() { return returnDate; }
+    public void setReturnDate(LocalDate returnDate) { this.returnDate = returnDate; }
+
+    public double getFineAmount() { return fineAmount; }
+    public void setFineAmount(double fineAmount) { this.fineAmount = fineAmount; }
+
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 }

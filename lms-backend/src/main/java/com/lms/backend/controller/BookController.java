@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.lms.backend.entity.Book;
+import com.lms.backend.entity.Issue;
 import com.lms.backend.service.BookService;
 
 @RestController
@@ -45,5 +46,17 @@ public class BookController {
             @RequestParam Long bookId) {
 
         return bookService.borrowBook(email, collegeId, bookId);
+    }
+
+    // ✅ Return Book
+    @PostMapping("/return")
+    public String returnBook(@RequestParam Long issueId) {
+        return bookService.returnBook(issueId);
+    }
+
+    // ✅ Get Issues for User
+    @GetMapping("/issues")
+    public List<Issue> getIssuesForUser(@RequestParam String email) {
+        return bookService.getIssuesForUser(email);
     }
 }
